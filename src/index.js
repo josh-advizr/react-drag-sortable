@@ -125,9 +125,11 @@ class DragSortableList extends React.Component {
   }
 
   render() {
-    const { placeholder, dragging, items } = this.state
-    let listItems = clone(items, true)
-    let draggedItem = null
+    const { placeholder, dragging, items } = this.state,
+        { className, ref, style, tag } = this.props
+    let listItems = clone(items, true),
+        draggedItem = null,
+        TagName = tag ? tag : 'div'
 
     // Add drag target
     if(placeholder) {
@@ -160,9 +162,14 @@ class DragSortableList extends React.Component {
     })
 
     return (
-      <div id={this.ref} className="List" ref={this.ref}>
+      <TagName 
+          id={this.ref} 
+          className={className ? className.split(' ').push('List').join(' ') : 'List'} 
+          ref={ref ? ref : this.ref}
+          style={style}
+      >
         {itemsNodes}
-      </div>
+      </TagName>
     )
   }
 
@@ -181,7 +188,7 @@ class DragSortableList extends React.Component {
 
     if(type === 'normal') {
       return (
-         <div ref={this.ref + key} style={style} data-id={id} data-rank={rank} key={key} className={classNames}>{content}</div>
+         <TagName ref={this.ref + key} style={style} data-id={id} data-rank={rank} key={key} className={classNames}>{content}</TagName>
       )
     }
 
@@ -190,7 +197,7 @@ class DragSortableList extends React.Component {
       style['zIndex'] = 10 // make sur it is on top
       classNames += ' dragged'
       return (
-         <div ref={this.ref + 'dragged'} data-id={id} key={key} className={classNames} style={style}>{content}</div>
+         <TagName ref={this.ref + 'dragged'} data-id={id} key={key} className={classNames} style={style}>{content}</TagName>
       )
     }
 
@@ -199,9 +206,9 @@ class DragSortableList extends React.Component {
       style.height = dragging.height
       classNames += ' placeholder'
       return (
-        <div ref={this.ref + 'placeholder'} key={'placeholder'} className={classNames} style={style}>
+        <TagName ref={this.ref + 'placeholder'} key={'placeholder'} className={classNames} style={style}>
           {placeholder}
-        </div>
+        </TagName>
       )
     }
   }
